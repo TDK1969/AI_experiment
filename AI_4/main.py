@@ -54,7 +54,7 @@ for i in range(generations):
     mutation(pop, pm)  # 变异
 
 results = results[1:]
-results.sort()
+results.sort()  # 排序
 best_x = results[-1][1]
 best_y = results[-1][0]
 print('y=10sin(5x)+7|x-5|+10')
