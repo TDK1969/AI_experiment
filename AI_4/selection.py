@@ -5,6 +5,11 @@ import random
 
 
 def sum(fit_value):
+    """
+    计算适应度之和
+    :param fit_value: 种群适应度
+    :return: 种群适应度之和
+    """
     total = 0
     for v in fit_value:
         total += v
@@ -12,6 +17,11 @@ def sum(fit_value):
 
 
 def accum(fit_value):
+    """
+    计算累计概率
+    :param fit_value: 百分比形式的种群适应度
+    :return:
+    """
     for i in range(1, len(fit_value) - 1):
         fit_value[i] += fit_value[i - 1]
         fit_value[-1] = 1
@@ -23,6 +33,7 @@ def selection(pop, fit_value):
     total_fit = sum(fit_value)
     for i in range(len(fit_value)):
         new_fit_value.append(fit_value[i] / total_fit)
+        # 将适应度转换为百分比
     # 打印累加之前的new_fit_value
     for a in new_fit_value:
         print(a)

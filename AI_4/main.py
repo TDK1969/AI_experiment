@@ -12,10 +12,17 @@ import settings
 
 
 def b2d(b, max_value, chrom_length):
+    '''
+
+    :param b: 二进制基因字符串
+    :param max_value: 基因允许出现的最大值
+    :param chrom_length: 基因长度
+    :return: 基因的十进制表示
+    '''
     t = 0
     for j in range(len(b)):
         t += b[j] * (math.pow(2, j))
-    t = t * max_value / (math.pow(2, chrom_length) - 1)
+    t = t * max_value / (math.pow(2, chrom_length) - 1) # 对转为的十进制进行权值调整
     return t
 
 
@@ -35,13 +42,13 @@ pm = settings.pm
 results = []  # 2d 存储每一代的最优解，[[best_fit, best_gene_encoding_dec]]
 fit_value = []  # 个体适应度
 
-pop = gene_encoding(pop_size, chrom_length)
+pop = gene_encoding(pop_size, chrom_length) # 种群初始化
 best_individual, best_fit = 0, 0
 
 for i in range(generations):
     fit_value = cal_fit_value(pop, chrom_length, max_value)  # 个体评价
     best_individual, best_fit = best(pop, fit_value)  # 第一个存储最优的解, 第二个存储最优基因
-    results.append([best_fit, b2d(best_individual, max_value, chrom_length)])
+    results.append([best_fit, b2d(best_individual, max_value, chrom_length)]) # 储存这一代的最优解和最优基因（十进制形式）
     pop = selection(pop, fit_value)  # 新种群复制
     crossover(pop, pc)  # 交配
     mutation(pop, pm)  # 变异
