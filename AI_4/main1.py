@@ -18,6 +18,7 @@ Lower_2 = -1
 Upper_2 = 1
 
 X = np.zeros((Ant, 2), dtype=np.float64)
+# 不使用信息素的方法
 Tau = np.zeros(Ant, dtype=np.float64)
 # 初始化蚂蚁的坐标
 for i in range(Ant):
@@ -52,6 +53,7 @@ ax.set_title("蚂蚁的初始位置分布")
 Tau_Best = np.zeros(Times, dtype=np.float64)
 for t in range(Times):
     for a in range(Ant):
+        # 蚁群随机局部搜索
         temp1 = X[a][0]+(2*rd.random()-1)*0.05
         temp2 = X[a][1]+(2*rd.random()-1)*0.05
         # 越界处理
