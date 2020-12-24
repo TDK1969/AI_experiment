@@ -4,6 +4,7 @@ import copy
 import time
 import sys
 import threading
+from evaluate import *
 
 # 棋型 权重
 OTHER = 0
@@ -170,7 +171,7 @@ class MAB():
             Chesses = self.Databoard[i]
             ScoreCom += self.CountScore(Chesses, self.ComRole)
             ScoreHum += self.CountScore(Chesses, self.HumRole)
-        
+
         # 竖排
         Chesses = []
         for j in range(1, COLUMN+1):
@@ -179,8 +180,8 @@ class MAB():
             ScoreCom += self.CountScore(Chesses, self.ComRole)
             ScoreHum += self.CountScore(Chesses, self.HumRole)
             Chesses.clear()
-        
-        # 正斜线 
+
+        # 正斜线
         for i in range(1-COLUMN, COLUMN):
             for x in range(1, COLUMN+1):
                 y = x - i
@@ -189,7 +190,7 @@ class MAB():
             ScoreCom += self.CountScore(Chesses, self.ComRole)
             ScoreHum += self.CountScore(Chesses, self.HumRole)
             Chesses.clear()
-        
+
         # 反斜线
         for i in range(2, 2*COLUMN+1):
             for x in range(1, COLUMN+1):
@@ -203,11 +204,50 @@ class MAB():
         # 返回电脑的分数与玩家的分数之差
         return ScoreCom - ScoreHum
 
-    def Min_AlphaBeta(self, depth, alpha, beta):
+    def Evaluate1(self, x, y):  # 评估函数，评估局势
+        ScoreCom = 0
+        ScoreHum = 0
+        # 横排
+
+        list1 = []
+        list2 = []
+        list3 = []
+        list4 = []
+
+        for tmp in range(-4, 5):
+            i = x + tmp
+            j = y + tmp
+            if i < 0 or i > 14:
+                list1.append(-1)
+            else:
+                list1.append(self.Databoard[i][y])
+            if j < 0 or j > 14:
+                list2.append(-1)
+            else:
+                list2.append(self.Databoard[x][j])
+            if i < 0 or j < 0 or i > 14 or j > 14:
+                list3.append(-1)
+            else:
+                list3.append(self.Databoard[i][j])
+            k = y - tmp
+            if i < 0 or k < 0 or i > 14 or k > 14:
+                list4.append(-1)
+            else:
+                list4.append(self.Databoard[i][k])
+
+        ScoreCom += self.CountScore(list1, self.ComRole) + self.CountScore(list2, self.ComRole) + \
+                    self.CountScore(list3, self.ComRole) + self.CountScore(list4, self.ComRole)
+        ScoreHum += self.CountScore(list1, self.HumRole) + self.CountScore(list2, self.HumRole) + \
+                    self.CountScore(list3, self.HumRole) + self.CountScore(list4, self.HumRole)
+        # 返回电脑的分数与玩家的分数之差
+        return ScoreCom - ScoreHum
+
+
+    def Min_AlphaBeta(self, depth, alpha, beta, x, y):
         # 极小层，搜索人类下的位置，求极小的评分
         # 如果到达最后一层，返回当前棋局评分即可
         if depth == 0:
-            score = self.Evaluate()
+            score = self.Evaluate1(x, y)
             return score
         
         nodes = self.neighbor_cell()
@@ -218,7 +258,7 @@ class MAB():
         BestScore = sys.maxsize
         for n in nodes:
             self.Databoard[n[0]][n[1]] = self.HumRole  # 假设在这个位置落子
-            ChildScore = self.Min_AlphaBeta(depth-1, min(BestScore, alpha), beta)
+            ChildScore = self.Max_AlphaBeta(depth-1, min(BestScore, alpha), beta, n[0], n[1])
             self.Databoard[n[0]][n[1]] = 0  # 复原
             if ChildScore < BestScore:
                 BestScore = ChildScore
@@ -230,10 +270,10 @@ class MAB():
         return BestScore
 
 
-    def Max_AlphaBeta(self, depth, alpha, beta):
+    def Max_AlphaBeta(self, depth, alpha, beta, x, y):
         # 如果到达最后一层，返回当前棋局评分即可
         if depth == 0:
-            score = self.Evaluate()
+            score = self.Evaluate1(x, y)
             return score
 
         nodes = self.neighbor_cell()
@@ -244,7 +284,7 @@ class MAB():
         BestScore = -sys.maxsize
         for n in nodes:
             self.Databoard[n[0]][n[1]] = self.ComRole 
-            ChildScore = self.Min_AlphaBeta(depth-1, alpha, max(BestScore, beta))
+            ChildScore = self.Min_AlphaBeta(depth-1, alpha, max(BestScore, beta), n[0], n[1])
             self.Databoard[n[0]][n[1]] = 0
             if ChildScore > BestScore:
                 BestScore = ChildScore
@@ -261,7 +301,7 @@ class MAB():
         ChildNode = []
         for n in nodes:
             self.Databoard[n[0]][n[1]] = self.ComRole
-            ChildScore = self.Min_AlphaBeta(depth - 1, sys.maxsize, -sys.maxsize)
+            ChildScore = self.Min_AlphaBeta(depth - 1, sys.maxsize, -sys.maxsize, n[0], n[1])
             if ChildScore > BestScore:
                 BestScore = ChildScore
                 ChildNode.clear()  # 如果出现新的最大值则清空ChildNode列表
