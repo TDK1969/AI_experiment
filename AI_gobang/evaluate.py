@@ -22,4 +22,14 @@ def judge_chong4(checklist):
 
 
 def judge_live3(checklist):
-    pass
+    """
+    活三
+    :param checklist: 长度为9的棋子列表
+    :return: 活三的数量
+    """
+    num = 0
+    for i in range(1, 5):
+        if checklist[i - 1] == checklist[i + 4] == 0 and \
+                checklist[i] == checklist[i + 1] == checklist[i + 2] == checklist[i + 3] == checklist[4]:
+            num += 1
+    return num
