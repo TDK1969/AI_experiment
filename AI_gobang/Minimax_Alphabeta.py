@@ -134,8 +134,33 @@ class MAB():
         return Scoretmp
 
     def TDK_evaluate(self, x, y):
-        pass
+        list1 = []
+        list2 = []
+        list3 = []
+        list4 = []
 
+        for tmp in range(-4, 5):
+            i = x + tmp
+            j = y + tmp
+            if i < 0 or i > 14:
+                list1.append(-1)
+            else:
+                list1.append(self.Databoard[i][y])
+            if j < 0 or j > 14:
+                list2.append(-1)
+            else:
+                list2.append(self.Databoard[x][j])
+            if i < 0 or j < 0 or i > 14 or j > 14:
+                list3.append(-1)
+            else:
+                list3.append(self.Databoard[i][j])
+            k = y - tmp
+            if i < 0 or k < 0 or i > 14 or k > 14:
+                list4.append(-1)
+            else:
+                list4.append(self.Databoard[i][k])
+
+        
 
     def Evaluate(self): # 评估函数，评估局势
         ScoreCom = 0
