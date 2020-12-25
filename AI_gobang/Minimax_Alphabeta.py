@@ -134,7 +134,7 @@ class MAB():
         Scoretmp += self.ScoreTable(Number, Empty)
         return Scoretmp
 
-    def TDK_evaluate(self, x, y):
+    def TDK_evaluate(self, x, y, player, enemy):
         list1 = []
         list2 = []
         list3 = []
@@ -160,7 +160,12 @@ class MAB():
                 list4.append(-1)
             else:
                 list4.append(self.Databoard[i][k])
+        #print(1)
+        #playerValue = value_point(player, enemy, list1, list2, list3, list4)
+        #enemyValue = value_point(enemy, player, list1, list2, list3, list4)
+        value = TDK_value(player, enemy, list1, list2, list3, list4)
 
+        return value
         
 
     def Evaluate(self): # 评估函数，评估局势
@@ -247,7 +252,8 @@ class MAB():
         # 极小层，搜索人类下的位置，求极小的评分
         # 如果到达最后一层，返回当前棋局评分即可
         if depth == 0:
-            score = self.Evaluate1(x, y)
+            #score = self.Evaluate1(x, y)
+            score = self.TDK_evaluate(x, y, self.HumRole, self.ComRole)
             return score
         
         nodes = self.neighbor_cell()
@@ -273,7 +279,8 @@ class MAB():
     def Max_AlphaBeta(self, depth, alpha, beta, x, y):
         # 如果到达最后一层，返回当前棋局评分即可
         if depth == 0:
-            score = self.Evaluate1(x, y)
+            #score = self.Evaluate1(x, y)
+            score = self.TDK_evaluate(x, y, self.ComRole, self.HumRole)
             return score
 
         nodes = self.neighbor_cell()
