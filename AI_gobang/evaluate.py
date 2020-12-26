@@ -68,7 +68,7 @@ def judge_sleep3(checklist, player, enemy):
     """
     num = 0
     for k in range(2):
-        reversed(checklist)
+        checklist.reverse()
         for i in range(1, 5):
             cnt = 0
             if checklist[i - 1] == enemy or checklist[i - 1] == -1:
@@ -131,7 +131,7 @@ def judge_bigjump2(checklist, player):
 def judge_sleep2(checklist, player, enemy):
     num = 0
     for i in range(2):
-        reversed(checklist)
+        checklist.reverse()
         if (checklist[2] == enemy or checklist[2] == -1) and checklist[3] == checklist[4] == player and \
                 checklist[5] == checklist[6] == 0:
             num += 1
@@ -159,6 +159,7 @@ def TDK_value(player, enemy, list1, list2, list3, list4):
     for i in range(2):
         tempValue = 0
         player, enemy = enemy, player
+        list1[4] = list2[4] = list3[4] = list4[4] = player
         five_num = judge_5(list1, player) + judge_5(list2, player) + judge_5(list3, player) + judge_5(list4, player)
         five_value = 10000000 * five_num
 

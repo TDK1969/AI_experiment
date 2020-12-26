@@ -163,7 +163,7 @@ class MAB():
         #print(1)
         #playerValue = value_point(player, enemy, list1, list2, list3, list4)
         #enemyValue = value_point(enemy, player, list1, list2, list3, list4)
-        value = TDK_value(player, enemy, list1, list2, list3, list4)
+        value = TDK_value(enemy, player, list1, list2, list3, list4)
 
         return value
         

@@ -9,11 +9,12 @@ from functools import partial
 from settings import COLUMN,ROW,DEPTH
 import settings
 import Minimax_Alphabeta
+import evolution
 
 ChessBoard = {}
 DataBoard = []
 LOG_LINE_NUM = 0
-Algorithms = ['Minimax_Alpha-beta', 'a', 'b']
+Algorithms = ['Minimax_Alpha-beta', 'Evolution', 'b']
 
 
 class Board():
@@ -94,7 +95,7 @@ class Board():
 
             button.pack(pady=10)
             i += 1
-        self.choose_algorithm(0)
+        self.choose_algorithm(1)
         self.set_chessboard(chessboard_frame)
 
     def choose_algorithm(self, alg_num):
@@ -104,7 +105,7 @@ class Board():
         if alg_num == 0:
             self.Algorithm = Minimax_Alphabeta.MAB()
         if alg_num == 1:
-            self.Algorithm = Minimax_Alphabeta.MAB()
+            self.Algorithm = evolution.evolution()
 
         self.write_to_Text("已选"+Algorithms[alg_num]+'算法')
 

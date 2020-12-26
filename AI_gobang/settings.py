@@ -1,3 +1,3 @@
 COLUMN = 15
 ROW = 15
-DEPTH = 3 # 层数
+DEPTH = 2 # 层数
