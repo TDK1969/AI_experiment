@@ -95,7 +95,7 @@ class Board():
 
             button.pack(pady=10)
             i += 1
-        self.choose_algorithm(1)
+        self.choose_algorithm(0)
         self.set_chessboard(chessboard_frame)
 
     def choose_algorithm(self, alg_num):

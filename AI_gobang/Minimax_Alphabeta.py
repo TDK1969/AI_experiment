@@ -251,56 +251,65 @@ class MAB():
     def Min_AlphaBeta(self, depth, alpha, beta, x, y):
         # 极小层，搜索人类下的位置，求极小的评分
         # 如果到达最后一层，返回当前棋局评分即可
+        score = self.TDK_evaluate(x, y, self.HumRole, self.ComRole)
+        BestScore = 0
+        """
         if depth == 0:
             #score = self.Evaluate1(x, y)
             score = self.TDK_evaluate(x, y, self.HumRole, self.ComRole)
             return score
-        
-        nodes = self.neighbor_cell()
-        
-        # 遍历所有可走位置
-        # MIN层，寻找最小的评分。在已经寻找的孩子节点中，BestScore目前为止找到的最小
-        # 若ChildScore < BestScore，则更新BestScore，并将这层alpha和BestScore中的较小值传入下一层的alpha，比alpha的大的分支则减去 
-        BestScore = sys.maxsize
-        for n in nodes:
-            self.Databoard[n[0]][n[1]] = self.HumRole  # 假设在这个位置落子
-            ChildScore = self.Max_AlphaBeta(depth-1, min(BestScore, alpha), beta, n[0], n[1])
-            self.Databoard[n[0]][n[1]] = 0  # 复原
-            if ChildScore < BestScore:
-                BestScore = ChildScore
-            # beta是上一层传入的最大值，上一层是MAX层，寻找的是最大值
-            # 这一层是MIN层，找最小值，如果此时评分已经比beta小了就不用再往下遍历了
-            # 因为返回值一定比现在的评分更小，上一层找最大值，一定不会被采用
-            if ChildScore <= beta:
-                break
-        return BestScore
+        """
+        if depth != 0:
+
+            nodes = self.neighbor_cell()
+
+            # 遍历所有可走位置
+            # MIN层，寻找最小的评分。在已经寻找的孩子节点中，BestScore目前为止找到的最小
+            # 若ChildScore < BestScore，则更新BestScore，并将这层alpha和BestScore中的较小值传入下一层的alpha，比alpha的大的分支则减去
+            BestScore = sys.maxsize
+            for n in nodes:
+                self.Databoard[n[0]][n[1]] = self.HumRole  # 假设在这个位置落子
+                ChildScore = self.Max_AlphaBeta(depth-1, min(BestScore, alpha), beta, n[0], n[1])
+                self.Databoard[n[0]][n[1]] = 0  # 复原
+                if ChildScore < BestScore:
+                    BestScore = ChildScore
+                # beta是上一层传入的最大值，上一层是MAX层，寻找的是最大值
+                # 这一层是MIN层，找最小值，如果此时评分已经比beta小了就不用再往下遍历了
+                # 因为返回值一定比现在的评分更小，上一层找最大值，一定不会被采用
+                if ChildScore <= beta:
+                    break
+        return score + BestScore
 
 
     def Max_AlphaBeta(self, depth, alpha, beta, x, y):
         # 如果到达最后一层，返回当前棋局评分即可
+        score = self.TDK_evaluate(x, y, self.ComRole, self.HumRole)
+        BestScore = 0
+        """
         if depth == 0:
             #score = self.Evaluate1(x, y)
             score = self.TDK_evaluate(x, y, self.ComRole, self.HumRole)
             return score
+        """
+        if depth != 0:
+            nodes = self.neighbor_cell()
 
-        nodes = self.neighbor_cell()
-        
-        # 遍历所有可走位置
-        # MAX层，寻找最大的评分。在已经寻找的孩子节点中，BestScore目前为止找到的最大
-        # 若ChildScore > BestScore，则更新BestScore，并将这层beta和BestScore中的较大值传入下一层的beta，比beta的小的分支则减去 
-        BestScore = -sys.maxsize
-        for n in nodes:
-            self.Databoard[n[0]][n[1]] = self.ComRole 
-            ChildScore = self.Min_AlphaBeta(depth-1, alpha, max(BestScore, beta), n[0], n[1])
-            self.Databoard[n[0]][n[1]] = 0
-            if ChildScore > BestScore:
-                BestScore = ChildScore
-            # alpha是上一层传入的最小值，上一层是MIN层，寻找的是最小值
-            # 这一层是MAX层，找最大值，如果此时评分已经比alpha大了就不用再往下遍历了
-            # 因为返回值一定比现在的评分更大，上一层找最小值，一定不会被采用
-            if ChildScore >= alpha:
-                break
-        return BestScore
+            # 遍历所有可走位置
+            # MAX层，寻找最大的评分。在已经寻找的孩子节点中，BestScore目前为止找到的最大
+            # 若ChildScore > BestScore，则更新BestScore，并将这层beta和BestScore中的较大值传入下一层的beta，比beta的小的分支则减去
+            BestScore = -sys.maxsize
+            for n in nodes:
+                self.Databoard[n[0]][n[1]] = self.ComRole
+                ChildScore = self.Min_AlphaBeta(depth-1, alpha, max(BestScore, beta), n[0], n[1])
+                self.Databoard[n[0]][n[1]] = 0
+                if ChildScore > BestScore:
+                    BestScore = ChildScore
+                # alpha是上一层传入的最小值，上一层是MIN层，寻找的是最小值
+                # 这一层是MAX层，找最大值，如果此时评分已经比alpha大了就不用再往下遍历了
+                # 因为返回值一定比现在的评分更大，上一层找最小值，一定不会被采用
+                if ChildScore >= alpha:
+                    break
+        return score + BestScore
     
     def MinMax_AlphaBeta(self, depth):
         nodes = self.neighbor_cell()

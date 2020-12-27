@@ -7,7 +7,7 @@ from evaluate import *
 import math
 
 generations = 100
-pop_size = 20
+pop_size = 50
 max_value = 15
 chrom_length = 8
 pc = 0.6
